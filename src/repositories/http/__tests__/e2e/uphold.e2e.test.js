@@ -32,8 +32,9 @@ describe('Uphold Http "Data" Repository Integration Tests', () => {
       expect(currencyPairTicker.ask !== undefined || currencyPairTicker.ask !== null).toBeTruthy();
       expect(currencyPairTicker.bid !== undefined || currencyPairTicker.bid !== null).toBeTruthy();
       expect(currencyPairTicker.currency !== undefined || currencyPairTicker.currency !== null).toBeTruthy();
-      expect(currencyPairTicker.currency).toBe('USD');
+      expect(currencyPairTicker.currency).toBe('EUR');
       expect(currencyPairTicker.spread !== undefined || currencyPairTicker.spread !== null).toBeTruthy();
+      expect(currencyPairTicker.price !== undefined || currencyPairTicker.price !== null).toBeTruthy();
     });
 
     test('should return a given currency pair (EUR-USD) and all its ticker information', async () => {
@@ -45,8 +46,9 @@ describe('Uphold Http "Data" Repository Integration Tests', () => {
       expect(currencyPairTicker.ask !== undefined || currencyPairTicker.ask !== null).toBeTruthy();
       expect(currencyPairTicker.bid !== undefined || currencyPairTicker.bid !== null).toBeTruthy();
       expect(currencyPairTicker.currency !== undefined || currencyPairTicker.currency !== null).toBeTruthy();
-      expect(currencyPairTicker.currency).toBe('EUR');
+      expect(currencyPairTicker.currency).toBe('USD');
       expect(currencyPairTicker.spread !== undefined || currencyPairTicker.spread !== null).toBeTruthy();
+      expect(currencyPairTicker.price !== undefined || currencyPairTicker.price !== null).toBeTruthy();
     });
   });
 });

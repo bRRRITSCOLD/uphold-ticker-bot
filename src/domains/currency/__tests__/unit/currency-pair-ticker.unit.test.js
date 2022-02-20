@@ -32,4 +32,18 @@ describe('{}CurrencyPairTicker Unit Tests', () => {
       expect(currencyPairTicker.spread.includes('.010')).toBeTruthy();
     });
   });
+
+  describe('.price', () => {
+    test('should return the price for a given asset in the specified currency of the given currency pair', () => {
+      const currencyPairTicker = new CurrencyPairTicker({
+        bid: '1',
+        ask: '1.01',
+        pair: 'USD-EUR'
+      });
+
+      expect(currencyPairTicker !== undefined).toBeTruthy();
+      expect(currencyPairTicker.price !== undefined).toBeTruthy();
+      expect(currencyPairTicker.price).toBe('1.005');
+    });
+  });
 });

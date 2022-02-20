@@ -52,7 +52,7 @@ onExit(() => {
           );
 
           if (difference > currencyPairConfig.oscillationPercentage) {
-            console.log(`[${new Date().toISOString()}] {}Uphold-ticker-bot::currencyPair=${
+            console.log(`[${new Date().toISOString()}] {}Uphold-ticker-bot::pair=${
               currencyPairTicker.pair
             }::currency=${
               currencyPairTicker.currency

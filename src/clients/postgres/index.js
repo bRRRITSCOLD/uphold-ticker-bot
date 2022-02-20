@@ -15,7 +15,7 @@ class PostgresClients {
   }
 
   getClient(name) {
-    return this.clients.find(c => c.name === name)
+    return this.clients.find(c => c.name === name);
   }
 }
 

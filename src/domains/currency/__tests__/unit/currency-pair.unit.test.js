@@ -21,7 +21,7 @@ describe('{}CurrencyPair Unit Tests', () => {
 
       expect(currencyPair !== undefined).toBeTruthy();
       expect(currencyPair.currency !== undefined).toBeTruthy();
-      expect(currencyPair.currency).toBe('USD');
+      expect(currencyPair.currency).toBe('EUR');
     });
   });
 });
