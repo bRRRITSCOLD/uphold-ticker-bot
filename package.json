@@ -1,0 +1,29 @@
+{
+  "name": "uphold-ticker-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bRRRITSCOLD/uphold-ticker-bot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bRRRITSCOLD/uphold-ticker-bot/issues"
+  },
+  "homepage": "https://github.com/bRRRITSCOLD/uphold-ticker-bot#readme",
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "nock": "^13.2.4"
+  },
+  "dependencies": {
+    "axios": "^0.26.0",
+    "config": "^3.3.7",
+    "postgresql-client": "^1.21.5",
+    "signal-exit": "^3.0.7"
+  }
+}

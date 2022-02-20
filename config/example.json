@@ -1,0 +1,9 @@
+{
+  "currencyPairs": [
+    {
+      "currencyPair": "BTC-USD",
+      "fetchIntervalMs": 5000,
+      "oscillationPercentage": 1
+    }
+  ]
+}
