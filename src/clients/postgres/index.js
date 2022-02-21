@@ -55,8 +55,8 @@ class PostgresClients {
   async shutdown() {
     const tasks = [];
 
-    for (const client in this.clients) {
-      tasks.push(client.pool.close());
+    for (const name in this.clients) {
+      tasks.push(this.clients[name].close());
     }
 
     await Promise.all(tasks);

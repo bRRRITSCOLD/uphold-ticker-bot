@@ -5,7 +5,7 @@ class MongoClients {
    *
    *
    * @memberof MongoClients
-   * @type {{ [key: string]: MongoClient; }}
+   * @type {{ [key: string]: { database: Db; client: MongoClient; }; }}
    */
   clients = {};
 
@@ -33,7 +33,7 @@ class MongoClients {
 
         const connectedDb = connectedClient.db(config.database);
 
-        this.clients[config.name] = connectedDb;
+        this.clients[config.name] = { database: connectedDb, client: connectedClient };
       };
 
       tasks.push(connect());
@@ -51,8 +51,16 @@ class MongoClients {
   async shutdown() {
     const tasks = [];
 
-    for (const client in this.clients) {
-      tasks.push(client.pool.close());
+    for (const name in this.clients) {
+      const disconnect = async () => {
+        const client = this.clients[name];
+
+        await client.client.close();
+
+        delete this.clients[name];
+      };
+
+      tasks.push(disconnect());
     }
 
     await Promise.all(tasks);
@@ -74,7 +82,7 @@ class MongoClients {
       return null;
     }
 
-    return client;
+    return client.database;
   }
 }
 

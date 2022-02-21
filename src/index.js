@@ -77,17 +77,17 @@ onExit(() => {
             +intervalCurrencyPairTicker.price
           );
 
-          if (difference >= currencyPairConfig.oscillationPercentage) {
+          if (Math.abs(difference) >= currencyPairConfig.oscillationPercentage) {
             await Promise.all([
               currencyPostgresRepo.insertCurrencyPairTickerAlert({
-                currentyPairTicker: intervalCurrencyPairTicker,
+                currencyPairTicker: intervalCurrencyPairTicker,
+                currencyPairConfig: currencyPairConfig,
                 difference,
-                currencyPairConfig: currencyPairConfig
               }),
               currencyMongoRepo.insertCurrencyPairTickerAlert({
-                currentyPairTicker: intervalCurrencyPairTicker,
+                currencyPairTicker: intervalCurrencyPairTicker,
+                currencyPairConfig: currencyPairConfig,
                 difference,
-                currencyPairConfig: currencyPairConfig
               })
             ])
         
