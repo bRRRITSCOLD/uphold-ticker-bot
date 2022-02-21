@@ -68,6 +68,13 @@ class CurrencyPairTicker extends CurrencyPair {
     return `${+this.ask - +this.bid}`;
   }
 
+  /**
+   *
+   *
+   * @readonly
+   * @memberof CurrencyPairTicker
+   * @returns {string}
+   */
   get price() {
     return `${((+this.ask) + (+this.bid)) / 2}`
   }

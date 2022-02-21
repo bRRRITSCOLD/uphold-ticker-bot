@@ -1,0 +1,26 @@
+version: '3'
+services:
+  postgres:
+    image: postgres # use latest official postgres version
+    restart: always
+    ports:
+      - 5432:5432
+    env_file:
+      - ./postgres/database.env # configure postgres
+    volumes:
+      - ./postgres/scripts/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+      - postgres-database-data:/var/lib/postgresql/data/ # persist data even if container shuts down
+  mongo:
+    image: mongo
+    env_file:
+      - ./mongo/database.env # configure postgres
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/scripts/initdb.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongo-database-data:/data/db/
+      - mongo-database-log:/var/log/mongodb/
+volumes:
+  postgres-database-data: # named volumes can be managed easier using docker-compose
+  mongo-database-data:
+  mongo-database-log:

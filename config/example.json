@@ -3,7 +3,12 @@
     {
       "currencyPair": "BTC-USD",
       "fetchIntervalMs": 5000,
-      "oscillationPercentage": 1
+      "oscillationPercentage": 0.01
+    },
+    {
+      "currencyPair": "USD-ETH",
+      "fetchIntervalMs": 3000,
+      "oscillationPercentage": 0.01
     }
   ]
 }

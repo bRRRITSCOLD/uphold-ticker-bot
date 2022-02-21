@@ -2,17 +2,25 @@
 const onExit = require('signal-exit');
 const config = require('config');
 
-// domains
-const { CurrencyPair } = require('./domains/currency/currency-pair');
+// clients
+const { postgresClients } = require('./clients/postgres');
+const { mongoClients } = require('./clients/mongo');
 
 // data repositories
-const { getCurrencyPairTicker } = require('./repositories/http/uphold');
+const upholdHttpRepo = require('./repositories/http/uphold');
+const currencyPostgresRepo = require('./repositories/postgres/currency');
+const currencyMongoRepo = require('./repositories/mongo/currency');
 
 // libs
 const { percentageDifference } = require('./common/utils/number');
 
+// domains
+const { CurrencyPair } = require('./domains/currency/currency-pair');
+
 // file constants
 const currencyPairConfigs = config.get('currencyPairs');
+const postgresClientConfig = config.get('postgresClient');
+const mongoClientConfig = config.get('mongoClient');
 const intervals = [];
 const previousCurrencyPairTickers = {};
 
@@ -22,14 +30,19 @@ onExit(() => {
     clearInterval(interval);
   }
 
+  Promise
+    .all([postgresClients.shutdown(), mongoClients.shutdown()])
+    .then(() => {});
+
   console.log(`{}Uphold-ticker-bot::exiting program`);
 });
 
 // main
-(() => {
+(async () => {
   try {
     console.log(`{}Uphold-ticker-bot::beginnning execution`);
 
+    // calculate requests per 5 min because the uphold api throttles at 500 per 5 min
     const totalRequestsPer5min = currencyPairConfigs.reduce((totalRequests, currencyPairConfig) => {
       totalRequests = totalRequests + ((60 * 5) / (currencyPairConfig.fetchIntervalMs / 1000))
       return totalRequests;
@@ -39,36 +52,62 @@ onExit(() => {
       throw new Error('uphold api only allows a total of 500 requests per 5 min (no matter the currency pair)');
     }
 
-    currencyPairConfigs.forEach(currencyPairConfig => {
+    await Promise.all([
+      postgresClients.init([postgresClientConfig]),
+      mongoClients.init([mongoClientConfig])
+    ]);
+
+    currencyPairConfigs.forEach(async currencyPairConfig => {
+      // pre fetch the data on start up to have starting point
+      const currencyPair = new CurrencyPair({ pair: currencyPairConfig.currencyPair });
+
+      const currencyPairTicker = await upholdHttpRepo.getCurrencyPairTicker(currencyPair);
+
+      previousCurrencyPairTickers[currencyPairTicker.pair] = currencyPairTicker;
+
+      // fetch data on a given interval of ms
       intervals.push(setInterval(async () => {
-        const currencyPair = new CurrencyPair({ pair: currencyPairConfig.currencyPair });
+        const intervalCurrencyPair = new CurrencyPair({ pair: currencyPairConfig.currencyPair });
     
-        const currencyPairTicker = await getCurrencyPairTicker(currencyPair);
+        const intervalCurrencyPairTicker = await upholdHttpRepo.getCurrencyPairTicker(intervalCurrencyPair);
   
-        if ( previousCurrencyPairTickers[currencyPairTicker.pair]) {
+        if (previousCurrencyPairTickers[intervalCurrencyPairTicker.pair]) {
           const difference = percentageDifference(
-            +previousCurrencyPairTickers[currencyPairTicker.pair].price,
-            +currencyPairTicker.price
+            +previousCurrencyPairTickers[intervalCurrencyPairTicker.pair].price,
+            +intervalCurrencyPairTicker.price
           );
 
-          if (difference > currencyPairConfig.oscillationPercentage) {
+          if (difference >= currencyPairConfig.oscillationPercentage) {
+            await Promise.all([
+              currencyPostgresRepo.insertCurrencyPairTickerAlert({
+                currentyPairTicker: intervalCurrencyPairTicker,
+                difference,
+                currencyPairConfig: currencyPairConfig
+              }),
+              currencyMongoRepo.insertCurrencyPairTickerAlert({
+                currentyPairTicker: intervalCurrencyPairTicker,
+                difference,
+                currencyPairConfig: currencyPairConfig
+              })
+            ])
+        
             console.log(`[${new Date().toISOString()}] {}Uphold-ticker-bot::pair=${
-              currencyPairTicker.pair
+              intervalCurrencyPairTicker.pair
             }::currency=${
-              currencyPairTicker.currency
+              intervalCurrencyPairTicker.currency
             }::ask=${
-              currencyPairTicker.ask
+              intervalCurrencyPairTicker.ask
             }::bid=${
-              currencyPairTicker.bid
+              intervalCurrencyPairTicker.bid
             }::spread=${
-              currencyPairTicker.spread
+              intervalCurrencyPairTicker.spread
             }::price=${
-              currencyPairTicker.price
+              intervalCurrencyPairTicker.price
             }::difference=${difference}`);
           }
         }
 
-        previousCurrencyPairTickers[currencyPairTicker.pair] = currencyPairTicker;
+        previousCurrencyPairTickers[intervalCurrencyPairTicker.pair] = intervalCurrencyPairTicker;
       }, currencyPairConfig.fetchIntervalMs));
     });
   } catch (err) {

@@ -26,7 +26,7 @@ describe('Uphold Http "Data" Repository Integration Tests', () => {
     test('should return a given currency pair (USD-EUR) and all its ticker information', async () => {
       nock(UPHOLD_API_BASE_URL)
         .get(`${UPHOLD_API_TICKER_ENPOINT}/USD-EUR`)
-        .reply(200, JSON.stringify({ ask: '1.01', bid: '1.00', currency: 'USD' }));
+        .reply(200, JSON.stringify({ ask: '1.01', bid: '1.00', currency: 'EUR' }));
   
       const currencyPairTicker = await getCurrencyPairTicker(new CurrencyPair({
         pair: 'USD-EUR'
@@ -48,7 +48,7 @@ describe('Uphold Http "Data" Repository Integration Tests', () => {
     test('should return a given currency pair (EUR-USD) and all its ticker information', async () => {
       nock(UPHOLD_API_BASE_URL)
         .get(`${UPHOLD_API_TICKER_ENPOINT}/EUR-USD`)
-        .reply(200, JSON.stringify({ ask: '1.01', bid: '1.00', currency: 'EUR' }));
+        .reply(200, JSON.stringify({ ask: '1.01', bid: '1.00', currency: 'USD' }));
   
       const currencyPairTicker = await getCurrencyPairTicker(new CurrencyPair({
         pair: 'EUR-USD'

@@ -5,7 +5,7 @@ const nock = require('nock');
 const { CurrencyPair } = require('../../../../domains/currency/currency-pair');
 
 // clients
-const { upholdHttpClient, UPHOLD_API_BASE_URL, UPHOLD_API_TICKER_ENPOINT } = require('../../../../clients/http/uphold');
+const { upholdHttpClient } = require('../../../../clients/http/uphold');
 
 // testee
 const {
