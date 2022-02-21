@@ -18,7 +18,7 @@
       * Duplicate `/docker/postgres/database.example.env` to `/docker/postgres/scripts/database.env`. Once duplicated replace all values like `<POSTGRES_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
       * Duplicate `/docker/postgres/scripts/initdb.example.sql` to `/docker/postgres/scripts/initdb.sql`. Once duplicated replace `<POSTGRES_DB>` with the value from `/docker/postgres/scripts/database.env` in the above step 
 
-3. Duplicate `/config/example.local.json` to `/config/defualt.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***2.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire (make sure the intervals all added together only equal 500 requests per 5 min as this is the throttle limit on the uphold api)
+3. Duplicate `/config/example.local.json` to `/config/default.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***2.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire (make sure the intervals all added together only equal 500 requests per 5 min as this is the throttle limit on the uphold api)
 
 
 ## Setup (Dockerized)
@@ -29,7 +29,7 @@
       * Duplicate `/docker/postgres/database.example.env` to `/docker/postgres/scripts/database.env`. Once duplicated replace all values like `<POSTGRES_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
       * Duplicate `/docker/postgres/scripts/initdb.example.sql` to `/docker/postgres/scripts/initdb.sql`. Once duplicated replace `<POSTGRES_DB>` with the value from `/docker/postgres/scripts/database.env` in the above step 
 
-2. Duplicate `/config/example.dockerized.json` to `/config/defualt.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***1.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire (make sure the intervals all added together only equal 500 requests per 5 min as this is the throttle limit on the uphold api)
+2. Duplicate `/config/example.dockerized.json` to `/config/default.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***1.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire (make sure the intervals all added together only equal 500 requests per 5 min as this is the throttle limit on the uphold api)
 
 ## Test (Local - follow Setup (Local) steps to run this)
 ```bash
