@@ -3,7 +3,7 @@
 ## Requirements
 1. `docker` must be installed along with `docker-compose`
 
-2. Node version 16 or higher
+2. Node version 16 or higher (if using https://asdf-vm.com/, your dev environment will be set toe the version in `.tools-version`)
 
 ## Setup (Local)
 1. install needed packages:
