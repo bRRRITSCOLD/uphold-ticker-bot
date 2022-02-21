@@ -9,6 +9,9 @@ const { CurrencyPairTicker } = require('../../../../domains/currency/currency-pa
 // clients
 const { mongoClients } = require('../../../../clients/mongo');
 
+// configs
+const mongoClientConfig = config.get('mongoClient');
+
 // testee
 const currencyMongoRepo = require('../../currency');
 
@@ -25,7 +28,7 @@ describe('Currency Mongo "Data" Repository Integration Tests', () => {
     beforeEach(async () => {
       dockerComposeEnvironment = await new DockerComposeEnvironment(composeFilePath, composeFile).up();
       
-      await mongoClients.init([config.get('mongoClient')]);
+      await mongoClients.init([mongoClientConfig]);
     });
 
     afterEach(async () => {
@@ -58,7 +61,7 @@ describe('Currency Mongo "Data" Repository Integration Tests', () => {
       expect(insertCurrencyPairTickerAlertResponse !== undefined).toBeTruthy();
       expect(insertCurrencyPairTickerAlertResponse).toBeTruthy();
 
-      const mongoClient = mongoClients.getClient('dev');
+      const mongoClient = mongoClients.getClient(mongoClientConfig.name);
       const cursor = await mongoClient.collection('currencyPairTickerAlerts').find();
 
       const found = [];

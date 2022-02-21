@@ -9,6 +9,9 @@ const { CurrencyPairTicker } = require('../../../../domains/currency/currency-pa
 // clients
 const { postgresClients } = require('../../../../clients/postgres');
 
+// configs
+const postgresClientConfig = config.get('postgresClient');
+
 // testee
 const currencyPostgresRepo = require('../../currency');
 
@@ -35,7 +38,7 @@ describe('Currency Postgres "Data" Repository Integration Tests', () => {
 
       await delay(3000);
 
-      await postgresClients.init([config.get('postgresClient')]);
+      await postgresClients.init([postgresClientConfig]);
     });
 
     afterEach(async () => {
@@ -68,7 +71,7 @@ describe('Currency Postgres "Data" Repository Integration Tests', () => {
       expect(insertCurrencyPairTickerAlertResponse !== undefined).toBeTruthy();
       expect(insertCurrencyPairTickerAlertResponse).toBeTruthy();
 
-      const postgresClient = postgresClients.getClient('dev');
+      const postgresClient = postgresClients.getClient(postgresClientConfig.name);
       const found = await postgresClient.query('select * from currency_pair_ticker_alerts');
 
       expect(found.rows.length === 1).toBeTruthy();
