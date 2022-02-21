@@ -31,7 +31,7 @@
 
 2. Duplicate `/config/example.dockerized.json` to `/config/defualt.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***1.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire (make sure the intervals all added together only equal 500 requests per 5 min as this is the throttle limit on the uphold api)
 
-## Test
+## Test (Local - follow Setup (Local) steps to run this)
 ```bash
 $ npm run test
 ```
