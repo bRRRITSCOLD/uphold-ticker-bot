@@ -1,5 +1,4 @@
 // node_modules
-const { execAsync } = require('async-child-process');
 const config = require('config');
 const { DockerComposeEnvironment } = require("testcontainers");
 const path = require('path');
