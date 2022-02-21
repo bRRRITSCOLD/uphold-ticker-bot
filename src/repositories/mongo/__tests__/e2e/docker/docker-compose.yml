@@ -1,0 +1,10 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    env_file:
+      - ../../../../../../docker/mongo/database.env # configure postgres
+    ports:
+      - 27017:27017
+    volumes:
+      - ../../../../../../docker/mongo/scripts/initdb.js:/docker-entrypoint-initdb.d/mongo-init.js:ro

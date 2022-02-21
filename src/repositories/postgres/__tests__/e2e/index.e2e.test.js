@@ -1,6 +1,8 @@
 // node_modules
 const { execAsync } = require('async-child-process');
 const config = require('config');
+const { DockerComposeEnvironment } = require("testcontainers");
+const path = require('path');
 
 // domains
 const { CurrencyPairTicker } = require('../../../../domains/currency/currency-pair-ticker');
@@ -19,17 +21,19 @@ const delay = ms => {
   });
 };
 
+const composeFilePath = path.resolve(__dirname, "docker");
+const composeFile = "docker-compose.yml";
+let dockerComposeEnvironment;
+
 describe('Currency Postgres "Data" Repository Integration Tests', () => {
   beforeAll(async () => {
     await postgresClients.shutdown();
-
-    await execAsync('docker-compose -f docker/docker-compose.yml down -v');
   });
 
   describe('#insertCurrencyPairTickerAlert', () => {
     beforeEach(async () => {
-      await execAsync('docker-compose -f docker/docker-compose.yml up -d');
-      
+      dockerComposeEnvironment = await new DockerComposeEnvironment(composeFilePath, composeFile).up();
+
       await delay(3000);
 
       await postgresClients.init([config.get('postgresClient')]);
@@ -38,7 +42,7 @@ describe('Currency Postgres "Data" Repository Integration Tests', () => {
     afterEach(async () => {
       await postgresClients.shutdown();
 
-      await execAsync('docker-compose -f docker/docker-compose.yml down -v');
+      await dockerComposeEnvironment.down()
     })
   
     test('should insert a currency pair ticker alert into postgres', async () => {

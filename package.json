@@ -17,9 +17,9 @@
   },
   "homepage": "https://github.com/bRRRITSCOLD/uphold-ticker-bot#readme",
   "devDependencies": {
-    "async-child-process": "^1.1.1",
     "jest": "^27.5.1",
-    "nock": "^13.2.4"
+    "nock": "^13.2.4",
+    "testcontainers": "^8.2.0"
   },
   "dependencies": {
     "axios": "^0.26.0",

@@ -1,6 +1,7 @@
 // node_modules
-const { execAsync } = require('async-child-process');
 const config = require('config');
+const { DockerComposeEnvironment } = require("testcontainers");
+const path = require('path');
 
 // domains
 const { CurrencyPairTicker } = require('../../../../domains/currency/currency-pair-ticker');
@@ -11,16 +12,18 @@ const { mongoClients } = require('../../../../clients/mongo');
 // testee
 const currencyMongoRepo = require('../../currency');
 
+const composeFilePath = path.resolve(__dirname, "docker");
+const composeFile = "docker-compose.yml";
+let dockerComposeEnvironment;
+
 describe('Currency Mongo "Data" Repository Integration Tests', () => {
   beforeAll(async () => {
     await mongoClients.shutdown();
-
-    await execAsync('docker-compose -f docker/docker-compose.yml down -v');
   });
 
   describe('#insertCurrencyPairTickerAlert', () => {
     beforeEach(async () => {
-      await execAsync('docker-compose -f docker/docker-compose.yml up -d');
+      dockerComposeEnvironment = await new DockerComposeEnvironment(composeFilePath, composeFile).up();
       
       await mongoClients.init([config.get('mongoClient')]);
     });
@@ -28,7 +31,7 @@ describe('Currency Mongo "Data" Repository Integration Tests', () => {
     afterEach(async () => {
       await mongoClients.shutdown();
 
-      await execAsync('docker-compose -f docker/docker-compose.yml down -v');
+      await dockerComposeEnvironment.down()
     })
   
     test('should insert a currency pair ticker alert into mongo', async () => {
