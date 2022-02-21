@@ -1,0 +1,49 @@
+{
+  "currencyPairs": [
+    {
+      "currencyPair": "BTC-USD",
+      "fetchIntervalMs": 5000,
+      "oscillationPercentage": 0.01
+    },
+    {
+      "currencyPair": "USD-ETH",
+      "fetchIntervalMs": 3000,
+      "oscillationPercentage": 0.01
+    },
+    {
+      "currencyPair": "XLM-USD",
+      "fetchIntervalMs": 3000,
+      "oscillationPercentage": 0.01
+    },
+    {
+      "currencyPair": "LTC-USD",
+      "fetchIntervalMs": 3000,
+      "oscillationPercentage": 0.01
+    }
+  ],
+  "postgresClient": {
+    "name": "<POSTGRES_DB>",
+    "host": "postgres://postgres",
+    "port": 5432,
+    "user": "<POSTGRES_USER>",
+    "password": "<POSTGRES_PASSWORD>",
+    "database": "<POSTGRES_DB>",
+    "pool": {
+      "min": 1,
+      "max": 15,
+      "idleTimeoutMillis": 5000
+    }
+  },
+  "mongoClient": {
+    "name": "<MONGO_DB>",
+    "host": "mongo",
+    "port": 27017,
+    "user": "<MONGO_USER>",
+    "password": "<MONGO_PWD>",
+    "database": "<MONGO_DB>",
+    "pool": {
+      "min": 1,
+      "max": 15
+    }
+  }
+}

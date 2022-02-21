@@ -1,4 +1,4 @@
-\connect <VALUE_DB>
+\connect <POSTGRES_DB>
 
 CREATE TABLE IF NOT EXISTS currency_pair_ticker_alerts (
 	alert_id serial PRIMARY KEY,

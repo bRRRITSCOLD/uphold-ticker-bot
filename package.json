@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node src/index",
     "test": "jest --testTimeout=999999"
   },
   "repository": {

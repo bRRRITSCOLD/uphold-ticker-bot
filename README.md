@@ -1,88 +1,72 @@
 # uphold-ticker-bot
 
-## Setup
-1. install needed packages
+## Setup (Local)
+1. install needed packages:
     ```bash
     $ npm install
     ```
-2. Create a config file `config/default.json` (we do this because we allow too many options for arguments to be passed via cli). Use `config/example.json` as an example and replace every `"<VALUE>"` entry with the correct values that match your setup/env/desires.
-    * Example default.json (remove the `// comments`)
-    ```json
-    {
-      "currencyPairs": [
-        {
-          "currencyPair": "BTC-USD",
-          // miliseconds
-          "fetchIntervalMs": 5000,
-          // 0 - 100
-          "oscillationPercentage": 0.01
-        },
-        {
-          "currencyPair": "USD-ETH",
-          // miliseconds
-          "fetchIntervalMs": 3000,
-          // 0 - 100
-          "oscillationPercentage": 0.05
-        }
-      ],
-      // only include if you are using step 3 below (under setup)
-      "postgresClients": [
-        {
-          "host": "postgres://postgres",
-          "user": "testUser",
-          "password": "test123"
-        }
-      ],
-      // only include if you are using step 3 below (under setup)
-      "mongoClients": [
 
-      ]
-    }
+2. Docker databases:
+    * Mongo:
+      * Duplicate `/docker/mongo/scripts/initdb.example.js` to `/docker/mongo/scripts/initdb.js`. Once duplicated replace all values like `<MONGO_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
+    * Postgres:
+      * Duplicate `/docker/postgres/database.example.env` to `/docker/postgres/scripts/database.env`. Once duplicated replace all values like `<POSTGRES_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
+      * Duplicate `/docker/postgres/scripts/initdb.example.sql` to `/docker/postgres/scripts/initdb.sql`. Once duplicated replace `<POSTGRES_DB>` with the value from `/docker/postgres/scripts/database.env` in the above step 
+
+3. Duplicate `/config/example.local.json` to `/config/defualt.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***2.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire
+
+
+## Setup (Dockerized)
+1. install needed packages:
+    ```bash
+    $ npm install
     ```
-3. If you will be using the database(s) you will need to create a `docker/<type>/database.env` file for each (i.e. `docker/postgres/database.env`, `docker/mongo/database.env`)
+
+2. Docker databases:
+    * Mongo:
+      * Duplicate `/docker/mongo/scripts/initdb.example.js` to `/docker/mongo/scripts/initdb.js`. Once duplicated replace all values like `<MONGO_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
+    * Postgres:
+      * Duplicate `/docker/postgres/database.example.env` to `/docker/postgres/scripts/database.env`. Once duplicated replace all values like `<POSTGRES_*>` with whatever you please (i.e. `foo`, `bar`, `ftw`, etc.)
+      * Duplicate `/docker/postgres/scripts/initdb.example.sql` to `/docker/postgres/scripts/initdb.sql`. Once duplicated replace `<POSTGRES_DB>` with the value from `/docker/postgres/scripts/database.env` in the above step 
+
+3. Duplicate `/config/example.dockerized.json` to `/config/defualt.json`. Replace all `<POSTGRES_*>` and `<MONGO_*>` values with the corresponding values you used in step ***2.*** above. Also feel free to remove or add values to the `currencyPairs` property of the config to track whatever curency pairs you desire
 
 ## Test
 ```bash
 $ npm run test
 ```
 
-## Run
-1. Local (no databases)
-    * Via npm/package.json
+## Run (Local)
+1. Start
+    * In one terminal window launch docker-compose and the databases
+      ```bash
+      $ docker-compose -f docker/docker-compose.local.yml up
+      ```
+    * Once the above command has completed with no additional input run the below in another terminal
       ```bash
       $ npm run start
       ```
-    * Via terminal/command-line
+2. Stop
+    * Press `ctrl + c` in the window the node app is running in to stop it
+    * Press `ctrl + c` in the window docker-compose is running in to stop it
+    * Once docker-compose is stopped run the following command in the same window (remove `-v` if you choose to persist/keep the data stored in the databases for the next time it is launched)
       ```bash
-      $ node src/index
+      $ docker-compose -f docker/docker-compose.local.yml down -v
       ```
-2. Local (with databases)
-    * Via npm/package.json
+
+## Run (Dockerized)
+1. Start
+    * In a terminal window run the below to start the full dockerized version of the whole suite
       ```bash
-      $ docker-compose -f docker/postgres/docker-compose.yml up
+      $ docker-compose -f docker/docker-compose.dockerized.yml up
       ```
+2. Stop
+    * Press `ctrl + c` in the window docker-compose is running in to stop it
+    * Once docker-compose is stopped run the following command in the same window (remove `-v` if you choose to persist/keep the data stored in the databases for the next time it is launched)
       ```bash
-      $ npm run start
+      $ docker-compose -f docker/docker-compose.dockerized.yml down -v
       ```
-    * Via terminal/command-line
-      ```bash
-      $ docker-compose -f
-      ```
-      ```bash
-      $ node src/index
-      ```
-    * Teardown
-      ```bash
-      $ docker-compose -f docker/postgres/docker-compose.yml down
-      ```
-3. Docker (no databases)
-    ```bash
-    $ docker-compose -f
-    ```
-4. Docker (with databases)
-    ```bash
-    $ docker-compose -f
-    ```
 
 ## Optimizations (Todos/Future)
-1. 
+1. Use `.dockerignore` and `gulp` to build to a `dist` folder and only dockerize files that are needed to run
+1. A full E2E test that runs `src/index.js` as a child process and interrogates the stdout from the child process and the databases.

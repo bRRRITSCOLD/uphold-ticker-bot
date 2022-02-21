@@ -134,3 +134,4 @@ config/default.json
 docker/postgres/database.env
 docker/postgres/database-data
 docker/postgres/scripts/initdb.sql
+docker/mongo/scripts/initdb.js

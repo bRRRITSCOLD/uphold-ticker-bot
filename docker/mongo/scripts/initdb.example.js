@@ -1,11 +1,11 @@
-db = db.getSiblingDB("<VALUE_DB>");
+db = db.getSiblingDB("<MONGO_DB>");
 
 db.createCollection('currencyPairTickerAlerts');
 
 db.createUser({
-  user: "<VALUE_USER>",
-  pwd: "<VALUE_PWD>",
+  user: "<MONGO_USER>",
+  pwd: "<MONGO_PWD>",
   roles: [
-    { role: "<VALUE_ROLE>", db: "<VALUE_DB>" }
+    { role: "readWrite", db: "<MONGO_DB>" }
   ],
 });
