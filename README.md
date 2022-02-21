@@ -1,5 +1,10 @@
 # uphold-ticker-bot
 
+## Requirements
+1. `docker` must be installed along with `docker-compose`
+
+2. Node version 16 or higher
+
 ## Setup (Local)
 1. install needed packages:
     ```bash
